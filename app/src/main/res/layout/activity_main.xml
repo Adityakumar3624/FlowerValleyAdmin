@@ -8,10 +8,10 @@
     tools:context=".MainActivity">
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/db_design"
         android:layout_width="match_parent"
         android:layout_height="220dp"
-        android:id="@+id/db_design"
-        android:background="@drawable/dashboard_bg"/>
+        android:background="@drawable/dashboard_bg" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_dashboard"
