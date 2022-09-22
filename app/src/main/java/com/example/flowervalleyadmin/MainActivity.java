@@ -6,11 +6,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.GridLayout;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -27,6 +25,8 @@ public class MainActivity extends AppCompatActivity{
         view_all_banner=findViewById(R.id.view_all_banner);
         order=findViewById(R.id.order);
         admin=findViewById(R.id.admin);
+
+
 
         add_flower.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,5 +82,11 @@ public class MainActivity extends AppCompatActivity{
 
 
     }
+    void replaceFragment(Fragment fragment){
 
+        FragmentManager fragmentManager=getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame,fragment);
+        fragmentTransaction.commit();
+    }
 }

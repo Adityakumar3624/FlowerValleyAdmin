@@ -4,14 +4,19 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentContainer;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.example.flowervalleyadmin.fragment.AddFlowerFragment;
+import com.example.flowervalleyadmin.fragment.AdminFragment;
+import com.example.flowervalleyadmin.fragment.BannerFragment;
+import com.example.flowervalleyadmin.fragment.OrderFragment;
+import com.example.flowervalleyadmin.fragment.ViewAllBannerFragment;
+import com.example.flowervalleyadmin.fragment.ViewAllFlowerFragment;
 
 public class HomeActivity extends AppCompatActivity {
 String fragmentName;
@@ -19,6 +24,7 @@ String fragmentName;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
 
 
         Intent intent=getIntent();

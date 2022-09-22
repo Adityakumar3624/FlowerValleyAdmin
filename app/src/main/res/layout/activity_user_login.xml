@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+
+    >
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:gravity="center"
+        android:text="Mobile"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+
+        />
+
+
+    <androidx.appcompat.widget.AppCompatEditText
+
+        android:id="@+id/mobile"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginRight="40dp"
+        android:hint="Mobile"
+        android:paddingLeft="15dp"
+        android:inputType="number"
+        android:maxLength="10"
+        android:singleLine="true" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/sand_otp_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="100dp"
+        android:text="sand otp" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

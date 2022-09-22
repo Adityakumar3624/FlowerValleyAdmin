@@ -1,4 +1,4 @@
-package com.example.flowervalleyadmin;
+package com.example.flowervalleyadmin.fragment;
 
 import android.os.Bundle;
 
@@ -8,7 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class OrderFragment extends Fragment {
+import com.example.flowervalleyadmin.R;
+
+public class ViewAllFlowerFragment extends Fragment {
+
 
 
     @Override
@@ -21,6 +24,6 @@ public class OrderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_order, container, false);
+        return inflater.inflate(R.layout.fragment_view_all_flower, container, false);
     }
 }
