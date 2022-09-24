@@ -3,6 +3,7 @@ package com.example.flowervalleyadmin;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatEditText;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,10 +23,10 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
 public class VerifyOtpActivity extends AppCompatActivity {
-    private static final String TAG = "OTPVerificationFragment";
+    private static final String TAG = "VerifyOtpActivity";
     String token;
     private AppCompatButton btnVerify;
-    private TextInputEditText etOtp;
+    private AppCompatEditText etOtp;
     private FirebaseAuth mAuth;
 
     @Override
@@ -38,7 +39,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
         }
 
         btnVerify = findViewById(R.id.verify_otp_btn);
-        etOtp = findViewById(R.id.edit_text_otp);
+        etOtp = findViewById(R.id.otp_view);
 
         mAuth = FirebaseAuth.getInstance();
 

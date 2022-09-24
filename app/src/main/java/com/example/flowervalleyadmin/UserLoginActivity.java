@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 public class UserLoginActivity extends AppCompatActivity {
 
-    private static final String TAG = "LoginFragment";
+    private static final String TAG = "UserLoginActivity";
     private AppCompatEditText etMobile;
     private AppCompatButton loginbtn;
     private FirebaseAuth mAuth;
@@ -37,7 +37,7 @@ public class UserLoginActivity extends AppCompatActivity {
 
 
         etMobile=findViewById(R.id.mobile);
-        loginbtn=findViewById(R.id.sand_otp_btn);
+        loginbtn=findViewById(R.id.send_otp_btn);
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -53,8 +53,10 @@ public class UserLoginActivity extends AppCompatActivity {
                     Snackbar.make(loginbtn, "Please Enter Valid Mobile Number.", Snackbar.LENGTH_SHORT).show();
                     etMobile.requestFocus();
                 } else {
+
                     String mobileNumber = "+91" +etMobile.getText().toString().trim();
                     sendOTP(mobileNumber);
+                    Log.i(TAG,""+mobileNumber);
                 }
             }
         });
@@ -67,6 +69,7 @@ public class UserLoginActivity extends AppCompatActivity {
 
             @Override
             public void onVerificationFailed(@NonNull FirebaseException e) {
+                Log.e(TAG,""+e);
                 Snackbar.make(loginbtn, "OTP Not Sent.", Snackbar.LENGTH_SHORT).show();
             }
 

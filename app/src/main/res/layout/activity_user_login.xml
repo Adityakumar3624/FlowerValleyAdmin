@@ -18,21 +18,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/login_top_image"
-        android:layout_marginLeft="80dp"
-        android:text="Log in"
+        android:layout_centerInParent="true"
+        android:text="Admin Login"
         android:textColor="@color/green_700"
         android:textSize="25sp"
         android:textStyle="bold" />
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="to your account."
-        android:layout_toRightOf="@id/log_in_text"
-        android:textSize="25sp"
-        android:layout_marginLeft="6dp"
-        android:textColor="@color/black"
-        android:layout_below="@id/login_top_image"
-        />
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -41,34 +32,35 @@
         android:layout_below="@id/log_in_text"
         android:id="@+id/email_text_box">
 
-        <androidx.appcompat.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatTextView
 
             android:id="@+id/country_code"
             android:layout_width="70dp"
             android:layout_height="45dp"
             android:layout_marginLeft="40dp"
-
             android:layout_marginRight="10dp"
-            android:hint="+91"
             android:background="@drawable/edit_simple_box"
-            android:paddingLeft="15dp"
-            android:inputType="number"
-            android:maxLength="10"
-            android:singleLine="true" />
+            android:gravity="center"
+            android:singleLine="true"
+            android:hint="+91"
+
+            android:textSize="17dp"
+
+            />
 
         <androidx.appcompat.widget.AppCompatEditText
 
             android:id="@+id/mobile"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:background="@drawable/edit_simple_box"
+            android:layout_marginRight="40dp"
 
             android:layout_toRightOf="@id/country_code"
-            android:layout_marginRight="40dp"
+            android:background="@drawable/edit_simple_box"
             android:hint="Mobile"
-            android:paddingLeft="15dp"
             android:inputType="number"
             android:maxLength="10"
+            android:paddingLeft="15dp"
             android:singleLine="true" />
     </RelativeLayout>
 
@@ -86,7 +78,7 @@
         />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/sand_otp_btn"
+        android:id="@+id/send_otp_btn"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_below="@id/forgot_password"
@@ -95,7 +87,7 @@
         android:layout_marginTop="25dp"
         android:layout_marginRight="50dp"
         android:background="@drawable/login_edit_button"
-        android:text="Sand Otp"
+        android:text="Send Otp"
         android:textColor="@color/white" />
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="wrap_content"
@@ -106,13 +98,13 @@
         android:textSize="18sp"
         android:layout_marginLeft="65dp"
         android:textColor="@color/black"
-        android:layout_below="@id/sand_otp_btn"
+        android:layout_below="@id/send_otp_btn"
         />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/sand_otp_btn"
+        android:layout_below="@id/send_otp_btn"
         android:id="@+id/sign_in"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="40dp"
