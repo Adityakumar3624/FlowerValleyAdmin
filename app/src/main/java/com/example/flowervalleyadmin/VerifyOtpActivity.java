@@ -75,9 +75,6 @@ public class VerifyOtpActivity extends AppCompatActivity {
                             Intent intent=new Intent(VerifyOtpActivity.this,MainActivity.class);
                             startActivity(intent);
 
-
-
-
                             FirebaseUser user = task.getResult().getUser();
                             // Update UI
                         } else {

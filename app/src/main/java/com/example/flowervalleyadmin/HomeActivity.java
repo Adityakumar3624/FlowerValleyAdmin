@@ -8,12 +8,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.flowervalleyadmin.fragment.AddFlowerFragment;
 import com.example.flowervalleyadmin.fragment.AdminFragment;
-import com.example.flowervalleyadmin.fragment.BannerFragment;
+import com.example.flowervalleyadmin.fragment.AddBannerFragment;
 import com.example.flowervalleyadmin.fragment.OrderFragment;
 import com.example.flowervalleyadmin.fragment.ViewAllBannerFragment;
 import com.example.flowervalleyadmin.fragment.ViewAllFlowerFragment;
@@ -42,7 +44,7 @@ String fragmentName;
                 break;
             }
             case "banner":{
-                replaceFragment(new BannerFragment());
+                replaceFragment(new AddBannerFragment());
                 break;
             }
             case "view_all_banner":{
@@ -65,6 +67,29 @@ String fragmentName;
 
 
     }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i(TAG, "onActivityResult: " + requestCode);
+        Log.i(TAG, "onActivityResult: " + resultCode);
+        Log.i(TAG, "onActivityResult: " + data);
+
+        if (data != null && data.getData() != null) {
+            Uri mImageUri = data.getData();
+            Log.i(TAG, "onActivityResult: " + mImageUri);
+            Bundle bundle = new Bundle();
+            bundle.putString("image_uri", mImageUri.toString());
+
+            Toast.makeText(this, mImageUri + "", Toast.LENGTH_SHORT).show();
+            AddBannerFragment addBannerFragment = new AddBannerFragment();
+            addBannerFragment.setArguments(bundle);
+            replaceFragment(addBannerFragment);
+        } else {
+            Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     void replaceFragment(Fragment fragment){
 
