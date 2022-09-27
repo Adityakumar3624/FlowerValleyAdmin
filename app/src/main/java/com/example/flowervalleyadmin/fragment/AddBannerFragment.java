@@ -23,10 +23,12 @@ import android.webkit.MimeTypeMap;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.flowervalleyadmin.Banner;
 import com.example.flowervalleyadmin.R;
 import com.example.flowervalleyadmin.Upload;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -123,11 +125,16 @@ public class AddBannerFragment extends Fragment {
                             }, 500);
 
                             Toast.makeText(getContext(), "Upload successful", Toast.LENGTH_LONG).show();
-                            Upload upload = new Upload(mEditTextFileName.getText().toString().trim(),
-                                    taskSnapshot.getMetadata().getReference().getDownloadUrl().toString());
+                            Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                            while (!urlTask.isSuccessful()) ;
+                            Uri downloadUrl = urlTask.getResult();
+
+                            Log.i(TAG, "onSuccess: " + downloadUrl);
+
+                            Banner banner = new Banner(mEditTextFileName.getText().toString().trim(), downloadUrl.toString());
 
                             String uploadId = mDatabaseRef.push().getKey();
-                            mDatabaseRef.child(uploadId).setValue(upload);
+                            mDatabaseRef.child(uploadId).setValue(banner);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
