@@ -23,9 +23,8 @@ import android.webkit.MimeTypeMap;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.flowervalleyadmin.Banner;
 import com.example.flowervalleyadmin.R;
-import com.example.flowervalleyadmin.Upload;
+import com.example.flowervalleyadmin.model.BannerModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -131,9 +130,10 @@ public class AddBannerFragment extends Fragment {
 
                             Log.i(TAG, "onSuccess: " + downloadUrl);
 
-                            Banner banner = new Banner(mEditTextFileName.getText().toString().trim(), downloadUrl.toString());
 
+                            BannerModel banner = new BannerModel(mDatabaseRef.push().getKey(), mEditTextFileName.getText().toString().trim(), downloadUrl.toString());
                             String uploadId = mDatabaseRef.push().getKey();
+                            banner.setId(uploadId);
                             mDatabaseRef.child(uploadId).setValue(banner);
                         }
                     })
