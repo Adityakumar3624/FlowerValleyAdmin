@@ -1,5 +1,4 @@
-package com.example.flowervalleyadmin;
-
+package com.example.flowervalleyadmin.adapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
@@ -9,11 +8,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.flowervalleyadmin.model.BannerModel;
+import com.example.flowervalleyadmin.R;
+
+import com.example.flowervalleyadmin.model.Flower;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -22,49 +24,53 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.time.Instant;
 import java.util.ArrayList;
 
-public class ViewAllBannerAdapter extends  RecyclerView.Adapter<ViewAllBannerAdapter.ViewHolder>{
+public class FlowerAdapter  extends RecyclerView.Adapter<FlowerAdapter.ViewHolder>{
     private Context context;
-    private ArrayList<BannerModel> banners;
+    private ArrayList<Flower> flowers;
     StorageReference mStorageRef;
     DatabaseReference mDatabaseRef;
 
-    public ViewAllBannerAdapter(Context context, ArrayList<BannerModel> banners) {
+    public FlowerAdapter(Context context, ArrayList<Flower> flowers) {
         this.context = context;
-        this.banners = banners;
+        this.flowers = flowers;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.banner_list_layout, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.flower_list_layout, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        BannerModel banner = banners.get(position);
+        Flower flower = flowers.get(position);
 
-        mStorageRef = FirebaseStorage.getInstance().getReference("banners");
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference("banners");
+        mStorageRef = FirebaseStorage.getInstance().getReference("flowers");
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("flowers");
+
+
+        holder.flowerName.setText(flower.getFlowerName());
+        holder.flowerPrice.setText(flower.getFlowerPrice());
+        holder.flowerQty.setText(flower.getFlowerQuantity());
 
         Glide.with(context)
-                .load(banner.getImageUrl())
+                .load(flower.getFlowerImageUrl())
                 .into(holder.imgBanner);
 
         holder.cardBanner.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                showDialog(banner);
+                showDialog(flower);
                 return true;
             }
         });
 
     }
 
-    private void showDialog(BannerModel banner) {
+    private void showDialog(Flower flower) {
 
         new MaterialAlertDialogBuilder(context)
                 .setTitle("Delete Banner")
@@ -77,12 +83,12 @@ public class ViewAllBannerAdapter extends  RecyclerView.Adapter<ViewAllBannerAda
                 }).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        mStorageRef.getStorage().getReferenceFromUrl(banner.getImageUrl()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        mStorageRef.getStorage().getReferenceFromUrl(flower.getFlowerImageUrl()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
                                 Toast.makeText(context, "Banner deleted", Toast.LENGTH_SHORT).show();
-                                mDatabaseRef.child(banner.getId()).removeValue();
-                                banners.remove(banner);
+                                mDatabaseRef.child(flower.getFlowerId()).removeValue();
+                                flowers.remove(flower);
 
                             }
                         }).addOnFailureListener(new OnFailureListener() {
@@ -97,17 +103,23 @@ public class ViewAllBannerAdapter extends  RecyclerView.Adapter<ViewAllBannerAda
 
     @Override
     public int getItemCount() {
-        return banners.size();
+        return flowers.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         AppCompatImageView imgBanner;
         CardView cardBanner;
+        AppCompatTextView flowerName, flowerPrice, flowerQty;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imgBanner = itemView.findViewById(R.id.img_banner);
             cardBanner = itemView.findViewById(R.id.card_banner);
+            flowerName = itemView.findViewById(R.id.flower_name);
+            flowerPrice = itemView.findViewById(R.id.flower_price);
+            flowerQty = itemView.findViewById(R.id.qty);
         }
     }
+
+
 }

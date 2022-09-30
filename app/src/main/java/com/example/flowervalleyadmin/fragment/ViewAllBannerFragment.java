@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.flowervalleyadmin.R;
-import com.example.flowervalleyadmin.ViewAllBannerAdapter;
+import com.example.flowervalleyadmin.adapter.ViewAllBannerAdapter;
 import com.example.flowervalleyadmin.model.BannerModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

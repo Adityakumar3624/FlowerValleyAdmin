@@ -10,6 +10,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
@@ -24,9 +25,14 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.flowervalleyadmin.R;
-import com.example.flowervalleyadmin.Upload;
+import com.example.flowervalleyadmin.model.Flower;
+import com.example.flowervalleyadmin.model.Upload;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -37,13 +43,12 @@ import com.google.firebase.storage.UploadTask;
 
 public class AddFlowerFragment extends Fragment {
 
-    private AppCompatButton mButtonChooseImage;
-    private AppCompatButton mButtonUpload;
-    private AppCompatTextView mTextViewShowUploads;
-    private AppCompatEditText mEditTextFileName;
-    private AppCompatImageView mImageView;
-    private ProgressBar mProgressBar;
+    private AppCompatImageButton btnImage;
+    private TextInputEditText etFlowerName, etFlowerPrice, etFlowerQuantity, etFlowerDescription;
+    private MaterialButton btnAddFlower;
+    private String imageURl = null;
     private Uri mImageUri;
+    private ProgressBar mProgressBar;
 
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
@@ -64,39 +69,59 @@ public class AddFlowerFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_add_flower, container, false);
 
 
-
-        mButtonChooseImage = view.findViewById(R.id.button_choose_image);
-        mButtonUpload = view.findViewById(R.id.button_upload);
-
-        mEditTextFileName = view.findViewById(R.id.edit_text_file_name);
-        mImageView = view.findViewById(R.id.image_view);
+        btnImage = view.findViewById(R.id.btn_image);
+        etFlowerName = view.findViewById(R.id.flower_name);
+        etFlowerPrice = view.findViewById(R.id.flower_price);
+        etFlowerQuantity = view.findViewById(R.id.flower_qty);
+        etFlowerDescription = view.findViewById(R.id.flower_description);
+        btnAddFlower = view.findViewById(R.id.btn_flower);
         mProgressBar = view.findViewById(R.id.progress_bar);
 
-        mStorageRef = FirebaseStorage.getInstance().getReference("banners");
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference("banners");
+        mStorageRef = FirebaseStorage.getInstance().getReference("flowers");
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("flowers");
+
 
         if (mImageUri != null) {
-            mImageView.setImageURI(mImageUri);
+            btnImage.setImageURI(mImageUri);
         }
 
-        mButtonChooseImage.setOnClickListener(new View.OnClickListener() {
+        btnImage.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 openFileChooser();
+
             }
         });
 
-        mButtonUpload.setOnClickListener(new View.OnClickListener() {
+        btnAddFlower.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                if (mUploadTask != null && mUploadTask.isInProgress()) {
-                    Toast.makeText(getContext(), "Upload in progress", Toast.LENGTH_SHORT).show();
+            public void onClick(View view) {
+                String strFlowerName, strFlowerPrice, strFlowerQuantity, strFlowerDescription;
+
+                if (mImageUri == null) {
+                    Snackbar.make(btnAddFlower, "Please Select Image.", Snackbar.LENGTH_SHORT).show();
+                } else if (etFlowerName.getText().toString().trim().equalsIgnoreCase("")) {
+                    Snackbar.make(btnAddFlower, "Please Enter Flower Name.", Snackbar.LENGTH_SHORT).show();
+                    etFlowerName.requestFocus();
+                } else if (etFlowerPrice.getText().toString().trim().equalsIgnoreCase("")) {
+                    Snackbar.make(btnAddFlower, "Please Enter Price.", Snackbar.LENGTH_SHORT).show();
+                    etFlowerPrice.requestFocus();
+                } else if (etFlowerQuantity.getText().toString().trim().equalsIgnoreCase("")) {
+                    Snackbar.make(btnAddFlower, "Please Enter Quantity.", Snackbar.LENGTH_SHORT).show();
+                    etFlowerQuantity.requestFocus();
+                } else if (etFlowerDescription.getText().toString().trim().equalsIgnoreCase("")) {
+                    Snackbar.make(btnAddFlower, "Please Enter Flower Description.", Snackbar.LENGTH_SHORT).show();
+                    etFlowerDescription.requestFocus();
                 } else {
-                    uploadFile();
+                    strFlowerName = etFlowerName.getText().toString().trim();
+                    strFlowerPrice = etFlowerPrice.getText().toString().trim();
+                    strFlowerQuantity = etFlowerQuantity.getText().toString().trim();
+                    strFlowerDescription = etFlowerDescription.getText().toString().trim();
+
+                    uploadFlower(imageURl, strFlowerName, strFlowerPrice, strFlowerQuantity, strFlowerDescription);
                 }
             }
         });
-
 
         return view;
     }
@@ -107,10 +132,17 @@ public class AddFlowerFragment extends Fragment {
         return mime.getExtensionFromMimeType(cR.getType(uri));
     }
 
-    private void uploadFile() {
+    private void openFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        getActivity().startActivityForResult(intent, 102);
+    }
+
+    private void uploadFlower(String imageURl, String flowerName, String flowerPrice, String flowerQuantity, String flowerDescription) {
         if (mImageUri != null) {
-            StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
-                    + "." + getFileExtension(mImageUri));
+            mProgressBar.setVisibility(View.VISIBLE);
+            StorageReference fileReference = mStorageRef.child(System.currentTimeMillis() + "." + getFileExtension(mImageUri));
 
             mUploadTask = fileReference.putFile(mImageUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -124,19 +156,34 @@ public class AddFlowerFragment extends Fragment {
                                 }
                             }, 500);
 
-                            Toast.makeText(getContext(), "Upload successful", Toast.LENGTH_LONG).show();
-                            Upload upload = new Upload(mEditTextFileName.getText().toString().trim(),
-                                    taskSnapshot.getMetadata().getReference().getDownloadUrl().toString());
 
+                            Toast.makeText(getContext(), "Upload successful", Toast.LENGTH_LONG).show();
+
+                            Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                            while (!urlTask.isSuccessful()) ;
+                            Uri downloadUrl = urlTask.getResult();
+
+                            Log.i(TAG, "onSuccess: " + downloadUrl);
+
+                            Flower flower = new Flower(mDatabaseRef.push().getKey(), flowerName, flowerPrice, flowerQuantity, flowerDescription, downloadUrl.toString());
                             String uploadId = mDatabaseRef.push().getKey();
-                            mDatabaseRef.child(uploadId).setValue(upload);
+                            flower.setFlowerId(uploadId);
+                            mDatabaseRef.child(uploadId).setValue(flower);
+                            mProgressBar.setVisibility(View.GONE);
+
+                            btnImage.setImageURI(null);
+                            etFlowerName.setText(null);
+                            etFlowerPrice.setText(null);
+                            etFlowerQuantity.setText(null);
+                            etFlowerDescription.setText(null);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.e(TAG, "onFailure: ",e );
+                            Log.e(TAG, "onFailure: ", e);
                             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            mProgressBar.setVisibility(View.GONE);
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -149,13 +196,7 @@ public class AddFlowerFragment extends Fragment {
         } else {
             Toast.makeText(getContext(), "No file selected", Toast.LENGTH_SHORT).show();
         }
-    }
 
-    private void openFileChooser() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, 101);
-    }
 
+    }
 }

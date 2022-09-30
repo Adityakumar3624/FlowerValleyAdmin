@@ -160,6 +160,6 @@ public class AddBannerFragment extends Fragment {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, 101);
+        getActivity().startActivityForResult(intent, 101);
     }
 }
